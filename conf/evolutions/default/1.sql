@@ -26,13 +26,6 @@ create table movie (
   constraint pk_movie primary key (id)
 );
 
-create table todo (
-  id                            bigint auto_increment not null,
-  value                         varchar(1024) not null,
-  user_id                       bigint,
-  constraint pk_todo primary key (id)
-);
-
 create table user (
   id                            bigint auto_increment not null,
   auth_token                    varchar(255),
@@ -53,9 +46,6 @@ create index ix_movie_list_favorites_list on movie_list (list_id);
 alter table movie_list add constraint fk_movie_list_movie foreign key (movie_id) references movie (id) on delete restrict on update restrict;
 create index ix_movie_list_movie on movie_list (movie_id);
 
-alter table todo add constraint fk_todo_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
-create index ix_todo_user_id on todo (user_id);
-
 
 # --- !Downs
 
@@ -68,16 +58,11 @@ drop index if exists ix_movie_list_favorites_list;
 alter table movie_list drop constraint if exists fk_movie_list_movie;
 drop index if exists ix_movie_list_movie;
 
-alter table todo drop constraint if exists fk_todo_user_id;
-drop index if exists ix_todo_user_id;
-
 drop table if exists favorites_list;
 
 drop table if exists movie_list;
 
 drop table if exists movie;
-
-drop table if exists todo;
 
 drop table if exists user;
 

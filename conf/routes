@@ -3,24 +3,22 @@
 # ~~~~
 
 # Home page
-GET           /cofee               controllers.Assets.at(path="/public", file="index.html")
-GET           /                    @controllers.Application.index1
+GET           /cofee                                      controllers.Assets.at(path="/public", file="index.html")
+GET           /                                           @controllers.Application.index1
 
-POST          /login               @controllers.SecurityController.login
-POST          /logout              @controllers.SecurityController.logout
+POST          /login                                      @controllers.SecurityController.login
+POST          /logout                                     @controllers.SecurityController.logout
 
-GET           /todos               @controllers.TodoController.getAllTodos
-POST          /todos               @controllers.TodoController.createTodo
+GET           /favlists                                   @controllers.FavoritesListController.getAllFavoritesLists
+GET           /favlists/:id                               @controllers.FavoritesListController.getMoviesByListId(id: Long)
+POST          /favlists                                   @controllers.FavoritesListController.createFavoritesList
+DELETE        /favlists/:id                               @controllers.FavoritesListController.deleteFavoritesList(id: Long)
+DELETE        /favlists/:favListId/movies/:movieId        @controllers.FavoritesListController.deleteMovieFromFavoritesList(favListId: Long, movieId: Long)
 
-GET           /favlists            @controllers.FavoritesListController.getAllFavoritesLists
-GET           /favlists/:id         @controllers.FavoritesListController.getMoviesByListId(id: Long)
-POST          /favlists            @controllers.FavoritesListController.createFavoritesList
-DELETE        /favlists/:id        @controllers.FavoritesListController.deleteFavoritesList(id: Long)
+POST          /movies                                     @controllers.FavoritesListController.addMovieToFavList
+GET           /movies                                     @controllers.MoviesController.getMovies
 
-POST          /movies              @controllers.FavoritesListController.addMovieToFavList
-GET           /movies              @controllers.MoviesController.getMovies
-
-GET           /assets/*file        controllers.Assets.at(path="/public", file)
+GET           /assets/*file                               controllers.Assets.at(path="/public", file)
 
 # Map the JS resource paths
-GET           /*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET           /*file                                      controllers.Assets.versioned(path="/public", file: Asset)

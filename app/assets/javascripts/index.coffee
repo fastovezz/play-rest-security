@@ -6,7 +6,7 @@ init = () ->
   if (!localStorage.getItem("authToken"))
     displayLoginForm()
   else
-    displayTodos()
+    displayFavlists()
 
 
 displayLoginForm = () ->
@@ -34,27 +34,27 @@ doLogin = (data, textStatus, jqXHR) ->
   # global state holder for the auth token
   localStorage.setItem("authToken", data.authToken)
   $("#loginForm").remove()
-  displayTodos()
+  displayFavlists()
 
 
-displayTodos = () ->
-  fetchTodos()
+displayFavlists = () ->
+  fetchFavlists()
   fetchMovies()
   $("body").empty()
   $("body").append $("<button>").text("Logout").click(doLogout)
-  $("body").append $("<h3>").text "Your Todos"
-  todoList = $("<ul>").attr("id", "todos")
-  $("body").append todoList
+  $("body").append $("<h3>").text "Your Favlists"
+  favList = $("<ul>").attr("id", "favlists")
+  $("body").append favList
   moviesList = $("<ul>").attr("id", "movies")
   $("body").append moviesList
-  todoForm = $("<form>").attr("action", "/todos").attr("method", "post").attr("id", "todoForm")
-  todoForm.append $("<input>").attr("id", "todoValue").attr("name", "value").attr("required", true)
-  todoForm.append $("<input>").attr("type", "submit").val("Create Todo")
-  todoForm.submit(createTodo)
-  $("body").append todoForm
+  favlistForm = $("<form>").attr("action", "/favlists").attr("method", "post").attr("id", "favlistForm")
+  favlistForm.append $("<input>").attr("id", "favlistValue").attr("name", "value").attr("required", true)
+  favlistForm.append $("<input>").attr("type", "submit").val("Create Favlist")
+  favlistForm.submit(createFavlist)
+  $("body").append favlistForm
 
 
-createTodo = (event) ->
+createFavlist = (event) ->
   event.preventDefault()
   $.ajax
     url: event.currentTarget.action
@@ -62,32 +62,32 @@ createTodo = (event) ->
     dataType: 'json'
     contentType: 'application/json'
     headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
-    data: JSON.stringify({value: $("#todoValue").val()})
+    data: JSON.stringify({name: $("#favlistValue").val()})
     error: (jqXHR, errorText, error) ->
       if (jqXHR.status == 401)
         displayLoginForm()
       else if (JSON.parse(jqXHR.responseText).value[0] != undefined)
-        displayError("A value must be specified for the Todo")
+        displayError("A value must be specified for the Favlist")
       else
         displayError("An uknown error occurred")
-    success: fetchTodos
+    success: fetchFavlists
 
 
-fetchTodos = () ->
+fetchFavlists = () ->
   $.ajax
-    url: "/todos"
+    url: "/favlists"
     type: "get"
     dataType: 'json'
     headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
     error: (jqXHR, errorMessage, error) ->
       if (jqXHR.status == 401)
         displayLoginForm()
-    success: (todos) ->
-      $("#todoValue").val("")
-      todoList = $("#todos")
-      todoList.empty()
-      $.each todos, (index, todo) ->
-        todoList.append $("<li>").text(todo.value)
+    success: (favlists) ->
+      $("#favlistValue").val("")
+      favList = $("#favlists")
+      favList.empty()
+      $.each favlists, (index, favlist) ->
+        favList.append $("<li>").text(favlist.name)
 
 fetchMovies = () ->
   $.ajax

@@ -46,9 +46,11 @@ public class FavoritesListController extends Controller {
             if (favListIdAsString != null) {
 
                 Movie movie = form.get();
-                Movie movieFromDb = Movie.findBiThemoviedbId(movie.themoviedbId);
+                Movie movieFromDb = Movie.findByThemoviedbId(movie.themoviedbId);
                 if(movieFromDb == null) {
                     movie.save();
+                } else {
+                    movie = movieFromDb;
                 }
                 FavoritesList favoritesList =
                         FavoritesList.findByUserAndId(SecurityController.getUser(), Long.valueOf(favListIdAsString));
@@ -82,5 +84,19 @@ public class FavoritesListController extends Controller {
 
         return ok(toJson(favoritesList.moviesList));
     }
+
+    public Result deleteMovieFromFavoritesList(Long favListId, Long movieId) {
+        FavoritesList favoritesList = FavoritesList.findById(favListId);
+        if(favoritesList != null) {
+            Movie movie = Movie.findById(movieId);
+            if(movie != null && favoritesList.moviesList.contains(movie)) {
+                favoritesList.moviesList.remove(movie);
+                favoritesList.save();
+                return ok("movie deleted from list successfully");
+            }
+        }
+        return ok("didn't find movie to delete or list to delete from");
+    }
+
 
 }
