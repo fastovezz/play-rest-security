@@ -24,7 +24,7 @@ require(['angular', './controllers', './directives', './filters', './services', 
         // Declare app level module which depends on filters, and services
 
         angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ngRoute'])
-            .factory('authInterceptor', ['$window', function ($window) {
+            .factory('authInterceptor', ['$window', '$q', '$location', function ($window, $q, $location) {
                 return {
                     // Add authorization authToken to headers
                     request: function (config) {
@@ -33,8 +33,17 @@ require(['angular', './controllers', './directives', './filters', './services', 
                         console.log('interceptor: ' + authToken);
                         if (authToken) {
                             config.headers['X-AUTH-TOKEN'] = authToken;
+                        }  else if ($location.path() != '/login' && $location.path() != '/signup') {
+                            $location.path('/login');
                         }
                         return config;
+                    },
+                    responseError: function (rejection) {
+                        if (rejection.status === 401) {
+                            $location.path('/login');
+                        }
+                        return $q.reject(rejection);
+
                     }
                 };
             }])
@@ -60,14 +69,6 @@ require(['angular', './controllers', './directives', './filters', './services', 
                 $routeProvider.when('/search', {
                     templateUrl: 'partials/search.html',
                     controller: controllers.SearchCtrl,
-                    access: {
-                        requiresLogin: true
-                    }
-                });
-
-                $routeProvider.when('/view2', {
-                    templateUrl: 'partials/partial2.html',
-                    controller: controllers.MyCtrl2,
                     access: {
                         requiresLogin: true
                     }

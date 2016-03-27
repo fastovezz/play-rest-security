@@ -9,18 +9,25 @@
         <script data-main="@routes.Assets.versioned("js/main.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")"></script>
     </head>
     <body>
-        <ul class="menu" ng-controller="MenuCtrl">
-            <li ng-if="!isLoggedIn"><a href="#/signup">Sign up!</a></li>
-            <li ng-if="!isLoggedIn"><a href="#/login">Login</a></li>
-            <li ng-if="isLoggedIn"><a href="#/">Home</a>&nbsp;({{email}})</li>
-            <li ng-if="isLoggedIn"><a href="#/search">Search</a></li>
-            <li ng-if="isLoggedIn"><a href="#/view2">view2</a></li>
-            <li ng-if="isLoggedIn"><button ng-click="logout()">Logout</button></li>
-        </ul>
+        <div id="wrapper">
+            <div id="header">
+		    </div> <!-- #header -->
 
-        <div ng-view></div>
+            <div id="content">
+                <ul class="menu" ng-controller="MenuCtrl">
+                    <li ng-if="!isLoggedIn"><a href="#/signup">Sign up!</a></li>
+                    <li ng-if="!isLoggedIn"><a href="#/login">Login</a></li>
+                    <li ng-if="isLoggedIn"><a href="#/">Home</a> &nbsp;({{email}})</li>
+                    <li ng-if="isLoggedIn"><a href="#/search">Search</a></li>
+                    <li ng-if="isLoggedIn"><button ng-click="logout()">Logout</button></li>
+                </ul>
 
-        <div>Angular seed app: v<span app-version></span></div>
+                <div ng-view></div>
+            </div>
 
+            <div id="footer" class="footer right small">
+                <div>Favorite movies app: v<span app-version></span></div>
+            </div> <!-- #footer -->
+        </div>
     </body>
 </html>

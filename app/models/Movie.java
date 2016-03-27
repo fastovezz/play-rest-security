@@ -46,8 +46,13 @@ public class Movie extends Model {
         return themoviedbId.hashCode();
     }
 
-    public static Movie findBiThemoviedbId(Long themopviedbId) {
+    public static Movie findByThemoviedbId(Long themopviedbId) {
         Model.Finder<Long, Movie> finder = new Model.Finder<>(Movie.class);
         return finder.where().eq("themoviedbId", themopviedbId).findUnique();
+    }
+
+    public static Movie findById(Long id) {
+        Model.Finder<Long, Movie> finder = new Model.Finder<>(Movie.class);
+        return finder.where().eq("id", id).findUnique();
     }
 }

@@ -60,6 +60,7 @@ define(['angular'], function (angular) {
                     }
                     if (indToDelete >= 0) {
                         $scope.favlists.splice(indToDelete, 1);
+                        delete $scope.movies;
                     }
                     console.log(deletedId);
                 })
@@ -72,6 +73,7 @@ define(['angular'], function (angular) {
             $http.get('/favlists/' + list.id)
                 .success(function (data) {
                     $scope.movies = data;
+                    $scope.selectedList = list;
                     console.log(data);
                 })
                 .error(function (error) {
@@ -79,6 +81,26 @@ define(['angular'], function (angular) {
 
                 });
         };
+
+        $scope.deleteMovieFromList = function (movie) {
+            $http.delete('/favlists/' + $scope.selectedList.id + '/movies/' + movie.id)
+                .success(function (data) {
+                    var indToDelete = -1;
+                    for (var i = 0; i < $scope.movies.length; i++) {
+                        if ($scope.movies[i].id == movie.id) {
+                            indToDelete = i;
+                            break;
+                        }
+                    }
+                    if (indToDelete >= 0) {
+                        $scope.movies.splice(indToDelete, 1);
+                    }
+                    console.log(data);
+                })
+                .error(function (error) {
+                    console.error(error);
+                });
+        }
     };
     controllers.MainCtrl.$inject = ['$scope', '$http', '$window', '$location', 'FavListsService'];
 
@@ -111,9 +133,8 @@ define(['angular'], function (angular) {
                 })
         };
 
-        $scope.model = {
-            favListId: 1
-        };
+        $scope.model = {};
+
         $scope.onChange = function () {
             console.log($scope.model.favListId);
         };
@@ -138,11 +159,6 @@ define(['angular'], function (angular) {
     };
     controllers.SearchCtrl.$inject = ['$scope', '$http', 'FavListsService'];
 
-    controllers.MyCtrl2 = function () {
-    }
-    controllers.MyCtrl2.$inject = [];
-
     return controllers;
 
-})
-;
+});

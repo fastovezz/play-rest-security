@@ -2,10 +2,12 @@
     <div class="row">
 
         <div class="left">
-            <h4>Left Col</h4>
+            <h4>Your favorites lists</h4>
             <ul>
                 <li ng-repeat="list in favlists track by list.name">
-                    <a href="" ng-click="getMoviesByListId(list)">{{list.name}}</a>
+                    <a href=""
+                       ng-class="{selected: selectedList == list}"
+                       ng-click="getMoviesByListId(list)">{{list.name}}</a>
                     <button ng-click="deleteList(list)">delete</button>
                 </li>
             </ul>
@@ -16,9 +18,10 @@
         </div>
 
         <div class="middle">
-            <h4>Middle Col</h4>
+            <h4>Movies</h4>
             <ul>
                 <li ng-repeat="movie in movies track by movie.themoviedbId">
+                    <img ng-if="movie.thumbnailUrl" ng-src="{{movie.thumbnailUrl}}" width="60">
                     {{movie.title}} <span ng-if="movie.release_date">({{movie.release_date}})</span>
                     <button ng-click="deleteMovieFromList(movie)">delete</button>
                 </li>
@@ -26,8 +29,6 @@
         </div>
 
         <div class="right">
-            <h4>Right Col</h4>
-            <p>...</p>
         </div>
 
     </div>

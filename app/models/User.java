@@ -8,9 +8,7 @@ import javax.persistence.*;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -21,7 +19,7 @@ public class User extends Model {
     public Long id;
 
     private String authToken;
-    
+
     @Column(length = 256, unique = true, nullable = false)
     @Constraints.MaxLength(256)
     @Constraints.Required
@@ -74,13 +72,7 @@ public class User extends Model {
         authToken = null;
         save();
     }
-    
-    
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    @JsonIgnore
-    public List<Todo> todos = new ArrayList<Todo>();
-    
-    
+
     public User() {
         this.creationDate = new Date();
     }
@@ -96,23 +88,21 @@ public class User extends Model {
     public static byte[] getSha512(String value) {
         try {
             return MessageDigest.getInstance("SHA-512").digest(value.getBytes("UTF-8"));
-        }
-        catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
     }
 
     public static Finder<Long, User> find = new Finder<>(User.class);
-    
+
     public static User findByAuthToken(String authToken) {
         if (authToken == null) {
             return null;
         }
 
-        try  {
+        try {
             return find.where().eq("authToken", authToken).findUnique();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return null;
         }
     }
