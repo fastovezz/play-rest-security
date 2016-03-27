@@ -1,0 +1,26 @@
+@()
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>My AngularJS App</title>
+        <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("img/favicon.png")">
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/app.css")">
+        <script data-main="@routes.Assets.versioned("js/main.js")" src="@routes.Assets.versioned("lib/requirejs/require.js")"></script>
+    </head>
+    <body>
+        <ul class="menu" ng-controller="MenuCtrl">
+            <li ng-if="!isLoggedIn"><a href="#/signup">Sign up!</a></li>
+            <li ng-if="!isLoggedIn"><a href="#/login">Login</a></li>
+            <li ng-if="isLoggedIn"><a href="#/">Home</a>&nbsp;({{email}})</li>
+            <li ng-if="isLoggedIn"><a href="#/search">Search</a></li>
+            <li ng-if="isLoggedIn"><a href="#/view2">view2</a></li>
+            <li ng-if="isLoggedIn"><button ng-click="logout()">Logout</button></li>
+        </ul>
+
+        <div ng-view></div>
+
+        <div>Angular seed app: v<span app-version></span></div>
+
+    </body>
+</html>

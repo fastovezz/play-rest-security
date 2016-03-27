@@ -6,20 +6,24 @@ import play.data.Form;
 import play.data.FormFactory;
 import play.data.validation.Constraints;
 import play.libs.Json;
-import play.mvc.*;
+import play.mvc.Controller;
+import play.mvc.Http;
+import play.mvc.Result;
+import play.mvc.Security;
 
 import javax.inject.Inject;
 
 public class SecurityController extends Controller {
 
-    @Inject FormFactory formFactory;
+    @Inject
+    FormFactory formFactory;
 
     public final static String AUTH_TOKEN_HEADER = "X-AUTH-TOKEN";
     public static final String AUTH_TOKEN = "authToken";
 
 
     public static User getUser() {
-        return (User)Http.Context.current().args.get("user");
+        return (User) Http.Context.current().args.get("user");
     }
 
     // returns an authToken
@@ -36,19 +40,16 @@ public class SecurityController extends Controller {
 
         if (user == null) {
             return unauthorized();
-        }
-        else {
+        } else {
             String authToken = user.createToken();
             ObjectNode authTokenJson = Json.newObject();
             authTokenJson.put(AUTH_TOKEN, authToken);
-            response().setCookie(Http.Cookie.builder(AUTH_TOKEN, authToken).withSecure(ctx().request().secure()).build());
             return ok(authTokenJson);
         }
     }
 
     @Security.Authenticated(Secured.class)
     public Result logout() {
-        response().discardCookie(AUTH_TOKEN);
         getUser().deleteAuthToken();
         return redirect("/");
     }
