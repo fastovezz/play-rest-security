@@ -1,14 +1,9 @@
-$ -> init()
+$ ->
+  init()
 
 
 init = () ->
-  # try to get an auth token
-  document.cookie.split('; ').forEach (cookieString) ->
-    cookie = cookieString.split("=")
-    if ((cookie.length == 2) && (cookie[0] == "authToken"))
-      window.authToken = cookie[1]
-      
-  if (window.authToken == undefined)
+  if (!localStorage.getItem("authToken"))
     displayLoginForm()
   else
     displayTodos()
@@ -35,18 +30,23 @@ displayLoginForm = () ->
 
 
 doLogin = (data, textStatus, jqXHR) ->
-  window.authToken = data.authToken # global state holder for the auth token
+  console.log(data)
+  # global state holder for the auth token
+  localStorage.setItem("authToken", data.authToken)
   $("#loginForm").remove()
   displayTodos()
 
 
 displayTodos = () ->
   fetchTodos()
+  fetchMovies()
   $("body").empty()
   $("body").append $("<button>").text("Logout").click(doLogout)
   $("body").append $("<h3>").text "Your Todos"
   todoList = $("<ul>").attr("id", "todos")
   $("body").append todoList
+  moviesList = $("<ul>").attr("id", "movies")
+  $("body").append moviesList
   todoForm = $("<form>").attr("action", "/todos").attr("method", "post").attr("id", "todoForm")
   todoForm.append $("<input>").attr("id", "todoValue").attr("name", "value").attr("required", true)
   todoForm.append $("<input>").attr("type", "submit").val("Create Todo")
@@ -61,7 +61,7 @@ createTodo = (event) ->
     type: event.currentTarget.method
     dataType: 'json'
     contentType: 'application/json'
-    headers: {"X-AUTH-TOKEN": window.authToken}
+    headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
     data: JSON.stringify({value: $("#todoValue").val()})
     error: (jqXHR, errorText, error) ->
       if (jqXHR.status == 401)
@@ -78,7 +78,7 @@ fetchTodos = () ->
     url: "/todos"
     type: "get"
     dataType: 'json'
-    headers: {"X-AUTH-TOKEN": window.authToken}
+    headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
     error: (jqXHR, errorMessage, error) ->
       if (jqXHR.status == 401)
         displayLoginForm()
@@ -88,6 +88,34 @@ fetchTodos = () ->
       todoList.empty()
       $.each todos, (index, todo) ->
         todoList.append $("<li>").text(todo.value)
+
+fetchMovies = () ->
+  $.ajax
+    url: "/movies"
+    type: "get"
+    headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
+    data: {searchText: "batman"}
+    error: (jqXHR, errorMessage, error) ->
+      if (jqXHR.status == 401)
+        displayLoginForm()
+    success: (results) ->
+      moviesList = $("#movies")
+      moviesList.empty()
+      $.each results, (key, result) ->
+        if(key == "results")
+          result.sort (val1, val2) ->
+            val1.release_date.localeCompare(val2.release_date)
+          $.each result, (innerKey, certainResult) ->
+            liItem = $("<li>")
+            liItem.text(certainResult.title + " (" + certainResult.release_date + ")")
+            poster = $("<img>", {
+              src: "http://image.tmdb.org/t/p/w300/" + certainResult.poster_path,
+              width: 60
+            })
+            poster.css( "padding-right", "15px" )
+            liItem.prepend poster
+            moviesList.append liItem
+            console.log("movie " + innerKey + ": " + JSON.stringify(certainResult))
 
 
 displayError = (error) ->
@@ -99,6 +127,12 @@ doLogout = (event) ->
     url: "/logout"
     type: "post"
     dataType: 'json'
-    headers: {"X-AUTH-TOKEN": window.authToken}
-    success: displayLoginForm
-    error: displayLoginForm
+    headers: {"X-AUTH-TOKEN": localStorage.getItem("authToken")}
+    success: (data) ->
+      console.log(data)
+      localStorage.removeItem("authToken")
+      displayLoginForm()
+    error: (data) ->
+      console.error(data)
+      localStorage.removeItem("authToken")
+      displayLoginForm()

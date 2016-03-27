@@ -1,0 +1,36 @@
+<div>
+    <input ng-model="searchText">
+    <button ng-click="search()">search</button>
+</div>
+
+<select id="issuesFilter"
+        ng-model="issuesFilter"
+        ng-options="filterItem.val as filterItem.label for filterItem
+								 		 			 in [{
+								 		 			 		val:'allIssues',
+								 		 			 		i18nKey: 'metranetApp.metadata.validationsFilter.allIssues',
+								 		 			 		label: 'All'
+							 		 			 		 },
+								 		 			 	 {
+								 		 			 	 	val:'validationIssues',
+								 		 			 	 	i18nKey: 'metranetApp.metadata.validationsFilter.elementsIssues',
+								 		 			 	 	label: 'Elements'
+							 		 			 	 	 },
+							 		 			 	 	 {
+							 		 			 	 	 	val:'loadIssues',
+							 		 			 	 	 	i18nKey: 'metranetApp.metadata.validationsFilter.loadIssues',
+							 		 			 	 	 	label: 'Load Issues'
+					 		 			 	 	 		 }]"
+        ng-change="populateAllValidationsGridModel(issuesFilter)"></select>
+
+<ul>
+    <li ng-repeat="movie in movies track by movie.id">
+        <img ng-if="movie.poster_path" ng-src="http://image.tmdb.org/t/p/w300/{{movie.poster_path}}" width="60">
+        {{movie.title}} <span ng-if="movie.release_date">({{movie.release_date}})</span>
+        <button ng-click="addMovieToList(movie)">add to list:</button>
+        <select id="favListId"
+                ng-change="onChange()"
+                ng-model="model.favListId"
+                ng-options="favList.id as favList.name for favList in favLists"></select>
+    </li>
+</ul>
