@@ -30,7 +30,6 @@ require(['angular', './controllers', './directives', './filters', './services', 
                     request: function (config) {
                         config.headers = config.headers || {};
                         var authToken = $window.localStorage.getItem('authToken');
-                        console.log('interceptor: ' + authToken);
                         if (authToken) {
                             config.headers['X-AUTH-TOKEN'] = authToken;
                         }  else if ($location.path() != '/login' && $location.path() != '/signup') {
