@@ -3,7 +3,7 @@
 # ~~~~
 
 # Home page
-GET           /cofee                                      controllers.Assets.at(path="/public", file="index.html")
+GET           /coffee                                     controllers.Assets.at(path="/public", file="index.html")
 GET           /                                           @controllers.Application.index1
 
 POST          /login                                      @controllers.SecurityController.login
