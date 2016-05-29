@@ -1,5 +1,9 @@
 package controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import models.FavoritesList;
 import models.Movie;
 import play.data.Form;
@@ -15,11 +19,18 @@ import static play.libs.Json.toJson;
 /**
  * @author Maks Fastovets.
  */
+@Api(value = "/favlists", description = "Operations about FavLists")
 @Security.Authenticated(Secured.class)
 public class FavoritesListController extends Controller {
     @Inject
     FormFactory formFactory;
 
+    @ApiOperation(nickname = "getAllFavoritesLists", value = "Get all FavLists",
+            notes = "Returns all FavLists", response = FavoritesList.class, httpMethod = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "Ok"),
+            @ApiResponse(code=401, message = "Unauthorized")
+    })
     public Result getAllFavoritesLists() {
         return ok(toJson(FavoritesList.findByUser(SecurityController.getUser())));
     }
@@ -82,7 +93,11 @@ public class FavoritesListController extends Controller {
     public Result getMoviesByListId(Long id) {
         FavoritesList favoritesList = FavoritesList.findById(id);
 
-        return ok(toJson(favoritesList.moviesList));
+        if(favoritesList == null) {
+            return notFound();
+        } else {
+            return ok(toJson(favoritesList.moviesList));
+        }
     }
 
     public Result deleteMovieFromFavoritesList(Long favListId, Long movieId) {
