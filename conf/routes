@@ -4,6 +4,7 @@
 
 # Home page
 GET           /coffee                                     controllers.Assets.at(path="/public", file="index.html")
+GET           /swagger-ui                                 controllers.Assets.at(path="/public", file="swagger-ui/index.html")
 GET           /                                           @controllers.Application.index1
 
 POST          /login                                      @controllers.SecurityController.login
@@ -17,6 +18,10 @@ DELETE        /favlists/:favListId/movies/:movieId        @controllers.Favorites
 
 POST          /movies                                     @controllers.FavoritesListController.addMovieToFavList
 GET           /movies                                     @controllers.MoviesController.getMovies
+GET           /go                                         @controllers.Application.google
+
+GET           /api-docs                                   controllers.ApiHelpController.getResources
+GET           /api-docs/favlists                          controllers.ApiHelpController.getResource(path = "/favlists")
 
 GET           /assets/*file                               controllers.Assets.at(path="/public", file)
 
