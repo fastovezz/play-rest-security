@@ -90,6 +90,13 @@ public class FavoritesListController extends Controller {
     }
 
 
+    @ApiOperation(nickname = "getMoviesByListId", value = "Get all movies of certain favlist",
+            notes = "Returns all FavLists", response = FavoritesList.class, httpMethod = "GET")
+    @ApiResponses(value = {
+            @ApiResponse(code=200, message = "Ok"),
+            @ApiResponse(code=401, message = "Unauthorized"),
+            @ApiResponse(code=404, message = "favlist not found")
+    })
     public Result getMoviesByListId(Long id) {
         FavoritesList favoritesList = FavoritesList.findById(id);
 
