@@ -140,13 +140,12 @@ define(['angular'], function (angular) {
         };
 
         $scope.addMovieToList = function (movie) {
-            $http.post('/movies', {
+            $http.post('/favlists/' + $scope.model.favListId + '/movies', {
                     title: movie.title,
                     thumbnailUrl: movie.poster_path
                         ? "http://image.tmdb.org/t/p/w300" + movie.poster_path
                         : null,
-                    themoviedbId: movie.id,
-                    favListId: $scope.model.favListId
+                    themoviedbId: movie.id
 
                 })
                 .success(function (data) {

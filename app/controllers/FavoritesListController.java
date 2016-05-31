@@ -1,9 +1,6 @@
 package controllers;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import models.FavoritesList;
 import models.Movie;
 import play.data.Form;
@@ -28,8 +25,8 @@ public class FavoritesListController extends Controller {
     @ApiOperation(nickname = "getAllFavoritesLists", value = "Get all FavLists",
             notes = "Returns all FavLists", response = FavoritesList.class, httpMethod = "GET")
     @ApiResponses(value = {
-            @ApiResponse(code=200, message = "Ok"),
-            @ApiResponse(code=401, message = "Unauthorized")
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 401, message = "Unauthorized")
     })
     public Result getAllFavoritesLists() {
         return ok(toJson(FavoritesList.findByUser(SecurityController.getUser())));
@@ -48,35 +45,79 @@ public class FavoritesListController extends Controller {
         return ok(deletedId);
     }
 
-    public Result addMovieToFavList() {
+    @ApiOperation(
+            nickname = "addMovieToFavList",
+            value = "Add movie to favList",
+            notes = "Add movie to favList",
+            httpMethod = "POST",
+            response = Movie.class
+    )
+    @ApiParam(
+            name = "favListId",
+            value = "favList id"
+    )
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "body",
+                            dataType = "models.Movie",
+                            required = true,
+                            paramType = "body",
+                            value = "models.Movie"
+                    )
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 400, message = "Json Processing Exception")
+            }
+    )
+    public Result addMovieToFavList(Long id) {
         Form<Movie> form = formFactory.form(Movie.class).bindFromRequest();
         if (form.hasErrors()) {
             return badRequest(form.errorsAsJson());
         } else {
-            String favListIdAsString = formFactory.form().bindFromRequest().get("favListId");
-            if (favListIdAsString != null) {
-
-                Movie movie = form.get();
-                Movie movieFromDb = Movie.findByThemoviedbId(movie.themoviedbId);
-                if(movieFromDb == null) {
-                    movie.save();
-                } else {
-                    movie = movieFromDb;
-                }
-                FavoritesList favoritesList =
-                        FavoritesList.findByUserAndId(SecurityController.getUser(), Long.valueOf(favListIdAsString));
-                if(!favoritesList.moviesList.contains(movie)) {
-                    movie.favoritesList.add(favoritesList);
-                    favoritesList.moviesList.add(movie);
-                    favoritesList.save();
-                }
-                return ok(toJson(movie));
+            Movie movie = form.get();
+            Movie movieFromDb = Movie.findByThemoviedbId(movie.themoviedbId);
+            if (movieFromDb == null) {
+                movie.save();
             } else {
-                return badRequest("favListId is not provided");
+                movie = movieFromDb;
             }
+            FavoritesList favoritesList =
+                    FavoritesList.findByUserAndId(SecurityController.getUser(), id);
+            if (!favoritesList.moviesList.contains(movie)) {
+                movie.favoritesList.add(favoritesList);
+                favoritesList.moviesList.add(movie);
+                favoritesList.save();
+            }
+            return ok(toJson(movie));
         }
     }
 
+    @ApiOperation(
+            nickname = "createFavoritesList",
+            value = "Create Favorites List",
+            notes = "Create Favorites List record",
+            httpMethod = "POST",
+            response = FavoritesList.class
+    )
+    @ApiImplicitParams(
+            {
+                    @ApiImplicitParam(
+                            name = "body",
+                            dataType = "models.FavoritesList",
+                            required = true,
+                            paramType = "body",
+                            value = "models.FavoritesList"
+                    )
+            }
+    )
+    @ApiResponses(
+            value = {
+                    @ApiResponse(code = 400, message = "Json Processing Exception")
+            }
+    )
     public Result createFavoritesList() {
         Form<FavoritesList> form = formFactory.form(FavoritesList.class).bindFromRequest();
         if (form.hasErrors()) {
@@ -93,14 +134,14 @@ public class FavoritesListController extends Controller {
     @ApiOperation(nickname = "getMoviesByListId", value = "Get all movies of certain favlist",
             notes = "Returns all FavLists", response = FavoritesList.class, httpMethod = "GET")
     @ApiResponses(value = {
-            @ApiResponse(code=200, message = "Ok"),
-            @ApiResponse(code=401, message = "Unauthorized"),
-            @ApiResponse(code=404, message = "favlist not found")
+            @ApiResponse(code = 200, message = "Ok"),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 404, message = "favlist not found")
     })
     public Result getMoviesByListId(Long id) {
         FavoritesList favoritesList = FavoritesList.findById(id);
 
-        if(favoritesList == null) {
+        if (favoritesList == null) {
             return notFound();
         } else {
             return ok(toJson(favoritesList.moviesList));
@@ -109,9 +150,9 @@ public class FavoritesListController extends Controller {
 
     public Result deleteMovieFromFavoritesList(Long favListId, Long movieId) {
         FavoritesList favoritesList = FavoritesList.findById(favListId);
-        if(favoritesList != null) {
+        if (favoritesList != null) {
             Movie movie = Movie.findById(movieId);
-            if(movie != null && favoritesList.moviesList.contains(movie)) {
+            if (movie != null && favoritesList.moviesList.contains(movie)) {
                 favoritesList.moviesList.remove(movie);
                 favoritesList.save();
                 return ok("movie deleted from list successfully");
