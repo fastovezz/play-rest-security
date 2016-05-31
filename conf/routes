@@ -16,7 +16,7 @@ POST          /favlists                                   @controllers.Favorites
 DELETE        /favlists/:id                               @controllers.FavoritesListController.deleteFavoritesList(id: Long)
 DELETE        /favlists/:favListId/movies/:movieId        @controllers.FavoritesListController.deleteMovieFromFavoritesList(favListId: Long, movieId: Long)
 
-POST          /movies                                     @controllers.FavoritesListController.addMovieToFavList
+POST          /favlists/:favListId/movies                 @controllers.FavoritesListController.addMovieToFavList(favListId: Long)
 GET           /movies                                     @controllers.MoviesController.getMovies
 GET           /go                                         @controllers.Application.google
 
