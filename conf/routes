@@ -20,9 +20,17 @@ POST          /favlists/:favListId/movies                 @controllers.Favorites
 GET           /movies                                     @controllers.MoviesController.getMovies
 GET           /go                                         @controllers.Application.google
 
+GET           /osfc/api-docs                              @controllers.Application.osfcApi
 GET           /api-docs                                   controllers.ApiHelpController.getResources
 GET           /api-docs/favlists                          controllers.ApiHelpController.getResource(path = "/favlists")
+GET           /api-docs/movies                            controllers.ApiHelpController.getResource(path = "/movies")
+
+# proxies to osfc REST API
 GET           /rest/*path                                 @controllers.Application.proxy(path)
+POST          /rest/*path                                 @controllers.Application.proxy(path)
+PUT           /rest/*path                                 @controllers.Application.proxy(path)
+DELETE        /rest/*path                                 @controllers.Application.proxy(path)
+PATCH         /rest/*path                                 @controllers.Application.proxy(path)
 
 GET           /assets/*file                               controllers.Assets.at(path="/public", file)
 
