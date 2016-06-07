@@ -1,5 +1,5 @@
 /*global require, requirejs */
-
+(function () {
 'use strict';
 
 requirejs.config({
@@ -121,3 +121,4 @@ require(['angular', './controllers', './directives', './filters', './services', 
         angular.bootstrap(document, ['myApp']);
 
     });
+})()

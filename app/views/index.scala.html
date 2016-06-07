@@ -17,14 +17,13 @@
         <div id="wrapper">
             <div id="header">
             </div> <!-- #header -->
-
             <div id="content">
                 <ul class="menu" ng-controller="MenuCtrl">
                     <li ng-if="!isLoggedIn"><a href="#/signup">Sign up!</a></li>
                     <li ng-if="!isLoggedIn"><a href="#/login">Login</a></li>
                     <li ng-if="isLoggedIn"><a href="#/">Home</a> &nbsp;({{email}})</li>
                     <li ng-if="isLoggedIn"><a href="#/search">Search</a></li>
-                    <li ng-if="isLoggedIn"><a href="/swagger-ui?/url=http://localhost:9000/api-docs">swagger-ui</a></li>
+                    <li ng-if="isLoggedIn"><a href="/swagger-ui?url=/api-docs">swagger-ui</a></li>
                     <li ng-if="isLoggedIn"><button ng-click="logout()">Logout</button></li>
                 </ul>
 

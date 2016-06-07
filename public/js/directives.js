@@ -1,16 +1,17 @@
 /*global define */
+(function () {
 
-'use strict';
+  'use strict';
 
-define(['angular'], function(angular) {
+  define(['angular'], function (angular) {
 
-/* Directives */
+    /* Directives */
 
-angular.module('myApp.directives', []).
-  directive('appVersion', ['version', function(version) {
-    return function(scope, elm, attrs) {
-      elm.text(version);
-    };
-  }]);
+    angular.module('myApp.directives', []).directive('appVersion', ['version', function (version) {
+      return function (scope, elm, attrs) {
+        elm.text(version);
+      };
+    }]);
 
-});
+  });
+})()
