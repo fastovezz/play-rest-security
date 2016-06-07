@@ -43,7 +43,7 @@ public class Application extends Controller {
                                 .as(response.getHeader("Content-Type")));
     }
 
-    public CompletionStage<Result> osfcApi() {
+    public CompletionStage<Result> ofscApi() {
         return ws.url(config.getString(OSFC_SWAGGER_JSON))
                 .setMethod(request().method())
                 .execute() // should be used with #setMethod()

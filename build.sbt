@@ -16,9 +16,9 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" % "play_2.11" % "2.5.3",
   "com.typesafe.play" % "play-datacommons_2.11" % "2.5.3",
   "org.webjars" % "jquery" % "2.2.1",
-  "org.webjars" % "angularjs" % "1.3.0-beta.2",
-  "org.webjars" % "requirejs" % "2.1.11-1",
-  "org.webjars" % "bootstrap" % "3.0.1",
+  "org.webjars.bower" % "angularjs" % "1.5.6",
+  "org.webjars" % "requirejs" % "2.2.0",
+  "org.webjars" % "bootstrap" % "3.3.6",
   "org.webjars" % "swagger-ui" % "2.1.8-M1",
 
   //todo: wait for play 2.5.x support

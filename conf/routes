@@ -20,7 +20,7 @@ POST          /favlists/:favListId/movies                 @controllers.Favorites
 GET           /movies                                     @controllers.MoviesController.getMovies
 GET           /go                                         @controllers.Application.google
 
-GET           /osfc/api-docs                              @controllers.Application.osfcApi
+GET           /ofsc/api-docs                              @controllers.Application.ofscApi
 GET           /api-docs                                   controllers.ApiHelpController.getResources
 GET           /api-docs/favlists                          controllers.ApiHelpController.getResource(path = "/favlists")
 GET           /api-docs/movies                            controllers.ApiHelpController.getResource(path = "/movies")
