@@ -15,9 +15,12 @@ libraryDependencies ++= Seq(
   "org.postgresql" % "postgresql" % "9.4-1202-jdbc42",
   "com.typesafe.play" % "play_2.11" % "2.5.3",
   "com.typesafe.play" % "play-datacommons_2.11" % "2.5.3",
-  "org.webjars" % "jquery" % "2.2.1",
+
   "org.webjars.bower" % "angularjs" % "1.5.6",
+  "org.webjars.bower" % "angular-route" % "1.5.6",
+
   "org.webjars" % "requirejs" % "2.2.0",
+  "org.webjars" % "jquery" % "2.2.1",
   "org.webjars" % "bootstrap" % "3.3.6",
   "org.webjars" % "swagger-ui" % "2.1.8-M1",
 
