@@ -26,6 +26,7 @@ libraryDependencies ++= Seq(
 
   //todo: wait for play 2.5.x support
   // meanwhile using local dependency $DEV_HOME/projects/play/swagger-play25
+  // build using https://github.com/CreditCardsCom/swagger-play.git repo
   "io.swagger" %% "swagger-play2" % "1.5.2-SNAPSHOT"
 )
 
