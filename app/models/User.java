@@ -16,7 +16,7 @@ public class User extends Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     private String authToken;
 
@@ -57,10 +57,10 @@ public class User extends Model {
     @Constraints.Required
     @Constraints.MinLength(2)
     @Constraints.MaxLength(256)
-    public String fullName;
+    private String fullName;
 
     @Column(nullable = false)
-    public Date creationDate;
+    private Date creationDate;
 
     public String createToken() {
         authToken = UUID.randomUUID().toString();
@@ -84,6 +84,45 @@ public class User extends Model {
         this.creationDate = new Date();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getAuthToken() {
+        return authToken;
+    }
+
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
+    }
+
+    public byte[] getShaPassword() {
+        return shaPassword;
+    }
+
+    public void setShaPassword(byte[] shaPassword) {
+        this.shaPassword = shaPassword;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 
     public static byte[] getSha512(String value) {
         try {

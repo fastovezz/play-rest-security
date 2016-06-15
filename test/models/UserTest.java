@@ -15,10 +15,10 @@ public class UserTest extends WithApplication {
     public void testCreate() {
         User user = new User("foo@foo.com", "password", "John Doe");
         user.save();
-        assertNotNull(user.id);
+        assertNotNull(user.getId());
         assertEquals("foo@foo.com", user.getEmailAddress());
-        assertEquals("John Doe", user.fullName);
-        assertNotNull(user.creationDate);
+        assertEquals("John Doe", user.getFullName());
+        assertNotNull(user.getCreationDate());
 
         try {
             // check the private shaPassword
@@ -68,7 +68,7 @@ public class UserTest extends WithApplication {
         User foundUser = User.findByEmailAddressAndPassword("foo@foo.com", "password");
 
         assertNotNull(foundUser);
-        assertEquals("John Doe", foundUser.fullName);
+        assertEquals("John Doe", foundUser.getFullName());
     }
 
     @Test
@@ -79,7 +79,7 @@ public class UserTest extends WithApplication {
         User foundUser = User.findByEmailAddressAndPassword("FOO@FOO.COM", "password");
 
         assertNotNull(foundUser);
-        assertEquals("John Doe", foundUser.fullName);
+        assertEquals("John Doe", foundUser.getFullName());
     }
 
     @Test
@@ -97,7 +97,7 @@ public class UserTest extends WithApplication {
         User newUser = new User("foo@foo.com", "password", "John Doe");
         newUser.save();
 
-        assertNotNull(newUser.id);
+        assertNotNull(newUser.getId());
 
         String token = newUser.createToken();
 
@@ -105,7 +105,7 @@ public class UserTest extends WithApplication {
 
         User foundUser = User.findByAuthToken(token);
 
-        assertEquals(foundUser.id, newUser.id);
+        assertEquals(foundUser.getId(), newUser.getId());
     }
 
 }
