@@ -37,7 +37,7 @@ public class FavoritesListController extends Controller {
         FavoritesList favoritesList = FavoritesList.findById(id);
         String deletedId = null;
         if (favoritesList != null) {
-            favoritesList.moviesList.clear();
+            favoritesList.getMoviesList().clear();
             favoritesList.save();
             favoritesList.delete();
             deletedId = String.valueOf(id);
@@ -78,7 +78,7 @@ public class FavoritesListController extends Controller {
             return badRequest(form.errorsAsJson());
         } else {
             Movie movie = form.get();
-            Movie movieFromDb = Movie.findByThemoviedbId(movie.themoviedbId);
+            Movie movieFromDb = Movie.findByThemoviedbId(movie.getThemoviedbId());
             if (movieFromDb == null) {
                 movie.save();
             } else {
@@ -86,9 +86,9 @@ public class FavoritesListController extends Controller {
             }
             FavoritesList favoritesList =
                     FavoritesList.findByUserAndId(SecurityController.getUser(), id);
-            if (!favoritesList.moviesList.contains(movie)) {
-                movie.favoritesList.add(favoritesList);
-                favoritesList.moviesList.add(movie);
+            if (!favoritesList.getMoviesList().contains(movie)) {
+                movie.getFavoritesList().add(favoritesList);
+                favoritesList.getMoviesList().add(movie);
                 favoritesList.save();
             }
             return ok(toJson(movie));
@@ -124,7 +124,7 @@ public class FavoritesListController extends Controller {
             return badRequest(form.errorsAsJson());
         } else {
             FavoritesList favoritesList = form.get();
-            favoritesList.user = SecurityController.getUser();
+            favoritesList.setUser(SecurityController.getUser());
             favoritesList.save();
             return ok(toJson(favoritesList));
         }
@@ -144,7 +144,7 @@ public class FavoritesListController extends Controller {
         if (favoritesList == null) {
             return notFound();
         } else {
-            return ok(toJson(favoritesList.moviesList));
+            return ok(toJson(favoritesList.getMoviesList()));
         }
     }
 
@@ -152,8 +152,8 @@ public class FavoritesListController extends Controller {
         FavoritesList favoritesList = FavoritesList.findById(favListId);
         if (favoritesList != null) {
             Movie movie = Movie.findById(movieId);
-            if (movie != null && favoritesList.moviesList.contains(movie)) {
-                favoritesList.moviesList.remove(movie);
+            if (movie != null && favoritesList.getMoviesList().contains(movie)) {
+                favoritesList.getMoviesList().remove(movie);
                 favoritesList.save();
                 return ok("movie deleted from list successfully");
             }

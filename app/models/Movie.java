@@ -14,21 +14,21 @@ import java.util.List;
 public class Movie extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @Column(nullable = false, length = 1024)
-    public String title;
+    private String title;
 
     @Column
-    public String thumbnailUrl;
+    private String thumbnailUrl;
 
     @Column(unique = true, nullable = false)
     @Constraints.Required
-    public Long themoviedbId;
+    private Long themoviedbId;
 
     @ManyToMany(mappedBy="moviesList")
     @JsonIgnore
-    public List<FavoritesList> favoritesList;
+    private List<FavoritesList> favoritesList;
 
     @Override
     public boolean equals(Object o) {
@@ -44,6 +44,46 @@ public class Movie extends Model {
     @Override
     public int hashCode() {
         return themoviedbId.hashCode();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getThumbnailUrl() {
+        return thumbnailUrl;
+    }
+
+    public void setThumbnailUrl(String thumbnailUrl) {
+        this.thumbnailUrl = thumbnailUrl;
+    }
+
+    public Long getThemoviedbId() {
+        return themoviedbId;
+    }
+
+    public void setThemoviedbId(Long themoviedbId) {
+        this.themoviedbId = themoviedbId;
+    }
+
+    public List<FavoritesList> getFavoritesList() {
+        return favoritesList;
+    }
+
+    public void setFavoritesList(List<FavoritesList> favoritesList) {
+        this.favoritesList = favoritesList;
     }
 
     public static Movie findByThemoviedbId(Long themopviedbId) {

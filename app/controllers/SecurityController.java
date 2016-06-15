@@ -36,7 +36,7 @@ public class SecurityController extends Controller {
 
         Login login = loginForm.get();
 
-        User user = User.findByEmailAddressAndPassword(login.emailAddress, login.password);
+        User user = User.findByEmailAddressAndPassword(login.getEmailAddress(), login.getPassword());
 
         if (user == null) {
             return unauthorized();
@@ -55,13 +55,28 @@ public class SecurityController extends Controller {
     }
 
     public static class Login {
-
         @Constraints.Required
         @Constraints.Email
-        public String emailAddress;
+        private String emailAddress;
 
         @Constraints.Required
-        public String password;
+        private String password;
+
+        public String getEmailAddress() {
+            return emailAddress;
+        }
+
+        public void setEmailAddress(String emailAddress) {
+            this.emailAddress = emailAddress;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public void setPassword(String password) {
+            this.password = password;
+        }
 
     }
 
