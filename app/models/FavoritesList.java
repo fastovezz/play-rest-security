@@ -28,14 +28,12 @@ public class FavoritesList extends Model {
 
     @ManyToMany
     @JoinTable(name = "MOVIE_LIST",
-            joinColumns =
-                    {
-                            @JoinColumn(name = "LIST_ID")
-                    },
-            inverseJoinColumns =
-                    {
-                            @JoinColumn(name = "MOVIE_ID")
-                    })
+            joinColumns = {
+                    @JoinColumn(name = "LIST_ID")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "MOVIE_ID")
+            })
     @JsonIgnore
     private List<Movie> moviesList;
 

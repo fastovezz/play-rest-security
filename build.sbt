@@ -13,6 +13,7 @@ libraryDependencies ++= Seq(
   javaWs,
   evolutions,
   "org.postgresql" % "postgresql" % "9.4-1202-jdbc42",
+  "mysql" % "mysql-connector-java" % "5.1.39",
   "com.typesafe.play" % "play_2.11" % "2.5.3",
   "com.typesafe.play" % "play-datacommons_2.11" % "2.5.3",
 

@@ -32,7 +32,7 @@ create table user (
   email_address                 varchar(256) not null,
   sha_password                  varbinary(64) not null,
   full_name                     varchar(256) not null,
-  creation_date                 timestamp not null,
+  creation_date                 datetime(6) not null,
   constraint uq_user_email_address unique (email_address),
   constraint pk_user primary key (id)
 );
@@ -49,14 +49,14 @@ create index ix_movie_list_movie on movie_list (movie_id);
 
 # --- !Downs
 
-alter table favorites_list drop constraint if exists fk_favorites_list_user_id;
-drop index if exists ix_favorites_list_user_id;
+alter table favorites_list drop foreign key fk_favorites_list_user_id;
+drop index ix_favorites_list_user_id on favorites_list;
 
-alter table movie_list drop constraint if exists fk_movie_list_favorites_list;
-drop index if exists ix_movie_list_favorites_list;
+alter table movie_list drop foreign key fk_movie_list_favorites_list;
+drop index ix_movie_list_favorites_list on movie_list;
 
-alter table movie_list drop constraint if exists fk_movie_list_movie;
-drop index if exists ix_movie_list_movie;
+alter table movie_list drop foreign key fk_movie_list_movie;
+drop index ix_movie_list_movie on movie_list;
 
 drop table if exists favorites_list;
 
